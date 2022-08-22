@@ -24,32 +24,31 @@ public class UserController {
         this.userConverter = userConverter;
     }
 
-
     @GetMapping
     public Collection<UserDto> findAll() {
         Collection<User> users = userService.getUsers().values();
         log.info("Находим всех существующих пользователей: {}", userService.getUsers().values());
         return users.stream()
-                .map(userConverter::userDto)
+                .map(userConverter::toUserDto)
                 .collect(Collectors.toList());
     }
 
     @GetMapping("{id}")
     public UserDto getUser(@PathVariable("id") long id) {
-        return userConverter.userDto(userService.getUser(id));
+        return userConverter.toUserDto(userService.getUser(id));
     }
 
     @PostMapping
     public UserDto create(@Valid @RequestBody UserDto userDto) {
-        User user = userConverter.user(userDto);
-        return userConverter.userDto(userService.create(user));
+        User user = userConverter.toUser(userDto);
+        return userConverter.toUserDto(userService.create(user));
     }
 
     @PatchMapping("{id}")
     public UserDto updateUser(@RequestBody UserDto userDto, @PathVariable("id") long id) {
         userDto.setId(id);
-        User user = userConverter.user(userDto);
-        return userConverter.userDto(userService.update(user, id));
+        User user = userConverter.toUser(userDto);
+        return userConverter.toUserDto(userService.update(user, id));
     }
 
     @DeleteMapping("{id}")

@@ -7,7 +7,7 @@ import ru.practicum.shareit.item.model.Item;
 @Service
 public class ItemConverter {
 
-    public ItemDto itemDto(Item item) {
+    public ItemDto toItemDto(Item item) {
         return new ItemDto(
                 item.getId(),
                 item.getName(),
@@ -16,7 +16,7 @@ public class ItemConverter {
         );
     }
 
-    public Item item(ItemDto itemDto) {
+    public Item toItem(ItemDto itemDto) {
         return new Item(
                 itemDto.getId(),
                 itemDto.getName(),

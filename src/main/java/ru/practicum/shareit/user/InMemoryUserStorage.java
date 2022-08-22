@@ -17,7 +17,6 @@ public class InMemoryUserStorage implements UserStorage {
     private final Map<Long, User> users = new HashMap<>();
     private final UserIdGenerator userIdGenerator;
 
-
     @Autowired
     public InMemoryUserStorage(UserIdGenerator userIdGenerator) {
         this.userIdGenerator = userIdGenerator;

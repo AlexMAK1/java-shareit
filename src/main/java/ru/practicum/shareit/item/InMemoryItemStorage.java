@@ -28,13 +28,12 @@ public class InMemoryItemStorage implements ItemStorage {
 
     @Override
     public Item create(Item item) {
-
         if (inMemoryUserStorage.getUsers().containsKey(item.getUserId())) {
             long newId = itemIdGenerator.generate();
             item.setId(newId);
             log.info("Сохраняем новую вещь: {}", item);
             items.put(newId, item);
-            inMemoryUserStorage.getUser(item.getUserId()).getItemList().add(item);
+            inMemoryUserStorage.getUser(item.getUserId()).getItems().add(item);
         } else {
             log.error("Ошибка, пользователя с таким id не существует: {}", item.getUserId());
             throw new NotFoundException("Ошибка, пользователя с таким id не существует.");
@@ -50,7 +49,7 @@ public class InMemoryItemStorage implements ItemStorage {
 
     @Override
     public List<Item> getItems(long userId) {
-        return inMemoryUserStorage.getUsers().get(userId).getItemList();
+        return inMemoryUserStorage.getUsers().get(userId).getItems();
     }
 
     @Override
@@ -65,8 +64,8 @@ public class InMemoryItemStorage implements ItemStorage {
                 Optional<Boolean> available = Optional.ofNullable(item.getAvailable());
                 item.setAvailable(available.orElse(oldItem.getAvailable()));
                 items.put(item.getId(), item);
-                inMemoryUserStorage.getUser(item.getUserId()).getItemList().clear();
-                inMemoryUserStorage.getUser(item.getUserId()).getItemList().add(item);
+                inMemoryUserStorage.getUser(item.getUserId()).getItems().clear();
+                inMemoryUserStorage.getUser(item.getUserId()).getItems().add(item);
                 log.info("Обновляем вещь: {}", item);
             }
         }

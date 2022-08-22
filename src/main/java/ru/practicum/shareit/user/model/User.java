@@ -14,7 +14,7 @@ public class User {
     private Long id;
     private String name;
     private String email;
-    List<Item> itemList = new ArrayList<>();
+    private final List<Item> items = new ArrayList<>();
 
     public User(Long id, String name, String email) {
         this.id = id;
