@@ -14,7 +14,9 @@ import java.util.List;
 public class BookingController {
 
     private static final String USER_ID_HEADER = "X-Sharer-User-Id";
+
     private static final String STATE_VALUE = "ALL";
+
     private final BookingService bookingService;
 
     @Autowired

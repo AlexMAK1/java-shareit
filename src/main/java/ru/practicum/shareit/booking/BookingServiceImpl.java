@@ -44,7 +44,7 @@ public class BookingServiceImpl implements BookingService {
             throw new NotFoundException("Владелец не может создавать бронь для своей же вещи");
         }
         if (!item.getAvailable()) {
-            log.error("Вещь в данный момент не доступна");
+            log.error("Вещь в данный момент не доступна: {}", item.getId());
             throw new ValidationException("Вещь в данный момент не доступна");
         }
         if (bookingDto.getEnd().isBefore(bookingDto.getStart())) {
