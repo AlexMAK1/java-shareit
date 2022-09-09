@@ -24,7 +24,6 @@ public class BookingController {
         this.bookingService = bookingService;
     }
 
-
     @PostMapping()
     public BookingDto create(@RequestHeader(USER_ID_HEADER) long userId, @Valid @RequestBody BookingDto bookingDto)
             throws ValidationException {

@@ -76,13 +76,13 @@ public class BookingServiceImpl implements BookingService {
         if (approved) {
             booking.setStatus(Status.APPROVED);
             bookingRepository.save(booking);
-            log.info("Подтверждается запрос на бронирование: {}", booking);
+            log.info("Подтверждается запрос на бронирование: {}", id);
             return BookingConverter.toBookingResponseDto(booking);
 
         }
         booking.setStatus(Status.REJECTED);
         bookingRepository.save(booking);
-        log.info("Отклоняется запрос на бронирование: {}", booking);
+        log.info("Отклоняется запрос на бронирование: {}", id);
         return BookingConverter.toBookingResponseDto(booking);
 
     }
@@ -93,16 +93,16 @@ public class BookingServiceImpl implements BookingService {
                 "с таким id не существует"));
         Item item = itemRepository.getReferenceById(booking.getItem().getId());
         if (item.getOwner().getId().equals(userId)) {
-            log.info("Находим бронирование с id: {}", booking);
+            log.info("Находим бронирование с id: {}", bookingId);
             return BookingConverter.toBookingResponseDto(booking);
         }
         if (booking.getBooker().getId().equals(userId)) {
-            log.info("Находим бронирование с id: {}", booking);
+            log.info("Находим бронирование с id: {}", bookingId);
             return BookingConverter.toBookingResponseDto(booking);
         }
-        log.error("Ошибка, валидация не пройдена. Пользователю с данным id вещь не принаджит: {}", userId);
+        log.error("Ошибка, валидация не пройдена. Пользователю с данным id вещь не принадлежит: {}", userId);
         throw new NotFoundException("Ошибка, валидация не пройдена. Пользователю с данным id " +
-                "вещь не принаджит");
+                "вещь не принадлежит");
     }
 
 
@@ -169,7 +169,7 @@ public class BookingServiceImpl implements BookingService {
     public List<BookingResponseDto> getOwnerBookings(String state, Long userId) {
         User owner = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Пользователя с таким id" +
                 " не существует"));
-        if (state.equals("ALL")) {
+        if ("ALL".equals(state)) {
             Item item = itemRepository.findDistinctTopByOwner(owner);
             List<Booking> bookings = bookingRepository.findAllByItem(item);
             log.info("Возвращаем список всех бронирований для владельца с id: {} {}", userId, bookings);

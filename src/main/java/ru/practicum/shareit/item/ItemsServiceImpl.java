@@ -25,8 +25,11 @@ import java.util.stream.Collectors;
 public class ItemsServiceImpl implements ItemService {
 
     private final UserRepository userRepository;
+
     private final ItemRepository itemRepository;
+
     private final BookingRepository bookingRepository;
+
     private final CommentRepository commentRepository;
 
     @Autowired

@@ -23,10 +23,8 @@ public class ItemInfoDto {
     @Data
     @AllArgsConstructor
     public static class BookingDto {
-        Long id;
-        // LocalDateTime start;
-        // LocalDateTime end;
-        Long bookerId;
+        private Long id;
+        private Long bookerId;
     }
 }
 
