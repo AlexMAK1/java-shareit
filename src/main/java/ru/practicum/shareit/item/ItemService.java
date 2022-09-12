@@ -1,41 +1,22 @@
 package ru.practicum.shareit.item;
 
-
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.item.dto.CommentDto;
+import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemInfoDto;
 
 import java.util.List;
 
-@Slf4j
-@Service
-public class ItemService {
+interface ItemService {
 
-    private final ItemStorage itemStorage;
+    ItemDto create(ItemDto itemDto, long userId);
 
-    @Autowired
-    public ItemService(ItemStorage itemStorage) {
-        this.itemStorage = itemStorage;
-    }
+    ItemDto update(ItemDto itemDto, long userId, long id);
 
-    public Item create(Item item) {
-        return itemStorage.create(item);
-    }
+    ItemInfoDto getItem(long id, long userId);
 
-    public Item update(Item item) {
-        return itemStorage.update(item);
-    }
+    List<ItemInfoDto> getItems(long userId);
 
-    public Item getItem(long id) {
-        return itemStorage.getItem(id);
-    }
+    List<ItemDto> getSearchItem(String text);
 
-    public List<Item> getItems(long userId) {
-        return itemStorage.getItems(userId);
-    }
-
-    public List<Item> getSearchItem(String text) {
-        return itemStorage.getSearchItem(text);
-    }
+    CommentDto createComment(CommentDto commentDto, long userId, long itemId);
 }

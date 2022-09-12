@@ -1,40 +1,18 @@
 package ru.practicum.shareit.user;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.user.dto.UserDto;
 
-import java.util.Map;
+import java.util.List;
 
-@Slf4j
-@Service
-public class UserService {
+public interface UserService {
 
-    private final UserStorage userStorage;
+    UserDto create(UserDto userDto);
 
-    @Autowired
-    public UserService(UserStorage userStorage) {
-        this.userStorage = userStorage;
-    }
+    UserDto getUser(long id);
 
-    public Map<Long, User> getUsers() {
-        return userStorage.getUsers();
-    }
+    List<UserDto> getUsers();
 
-    public User getUser(long id) {
-        return userStorage.getUser(id);
-    }
+    UserDto update(UserDto userDto, long id);
 
-    public User create(User user) {
-        return userStorage.create(user);
-    }
-
-    public User update(User user, long id) {
-        return userStorage.update(user, id);
-    }
-
-    public void delete(long id) {
-        userStorage.delete(id);
-    }
+    void delete(long id);
 }
