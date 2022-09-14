@@ -20,5 +20,4 @@ public class UserConverter {
                 userDto.getName(),
                 userDto.getEmail());
     }
-
 }

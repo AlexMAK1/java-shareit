@@ -1,68 +1,55 @@
 package ru.practicum.shareit.item;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.item.dto.ItemInfoDto;
 
 import javax.validation.Valid;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
 @RequestMapping("/items")
 public class ItemController {
 
-    private final ItemConverter itemConverter;
-
     private final ItemService itemService;
 
     private static final String HEADER = "X-Sharer-User-Id";
 
-    @Autowired
-    public ItemController(ItemConverter itemConverter, ItemService itemService) {
-        this.itemConverter = itemConverter;
+    public ItemController(ItemService itemService) {
         this.itemService = itemService;
     }
 
     @PostMapping()
-    public ItemDto create(@RequestHeader(HEADER) Long userId, @Valid @RequestBody ItemDto itemDto) {
-        Item item = itemConverter.toItem(itemDto);
-        item.setUserId(userId);
-        return itemConverter.toItemDto(itemService.create(item));
+    public ItemDto create(@RequestHeader(HEADER) long userId, @Valid @RequestBody ItemDto itemDto) {
+        return itemService.create(itemDto, userId);
     }
 
-
     @PatchMapping("{id}")
-    public ItemDto update(@RequestHeader(HEADER) Long userId, @RequestBody ItemDto itemDto, @PathVariable("id") long id) {
-        Item item = itemConverter.toItem(itemDto);
-        item.setUserId(userId);
-        item.setId(id);
-        return itemConverter.toItemDto(itemService.update(item));
+    public ItemDto update(@RequestHeader(HEADER) long userId, @RequestBody ItemDto itemDto, @PathVariable("id") long id) {
+        return itemService.update(itemDto, userId, id);
     }
 
     @GetMapping("{id}")
-    public ItemDto getItem(@PathVariable("id") long id) {
-        return itemConverter.toItemDto(itemService.getItem(id));
+    public ItemInfoDto getItem(@PathVariable("id") long id, @RequestHeader(HEADER) long userId) {
+        return itemService.getItem(id, userId);
     }
 
     @GetMapping
-    public List<ItemDto> getItems(@RequestHeader(HEADER) Long userId) {
-        List<Item> items = itemService.getItems(userId);
-        log.info("Находим все веши пользователя: {} {}", userId, items);
-        return items.stream()
-                .map(itemConverter::toItemDto)
-                .collect(Collectors.toList());
+    public List<ItemInfoDto> getItems(@RequestHeader(HEADER) long userId) {
+        return itemService.getItems(userId);
     }
 
     @GetMapping("/search")
     public Collection<ItemDto> getSearchItem(@RequestParam String text) {
-        List<Item> items = itemService.getSearchItem(text);
-        return items.stream()
-                .map(itemConverter::toItemDto)
-                .collect(Collectors.toList());
+        return itemService.getSearchItem(text);
+    }
+
+    @PostMapping("{itemId}/comment")
+    public CommentDto create(@RequestHeader(HEADER) long userId, @Valid @RequestBody CommentDto commentDto, @PathVariable("itemId") long itemId) {
+        return itemService.createComment(commentDto, userId, itemId);
     }
 }
