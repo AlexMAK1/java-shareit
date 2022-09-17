@@ -2,6 +2,7 @@ package ru.practicum.shareit.booking;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.booking.dto.BookingResponseDto;
 import ru.practicum.shareit.booking.model.Booking;
@@ -33,7 +34,7 @@ public class GetRejectedUserBookings implements BookingGenerator {
     }
 
     @Override
-    public List<BookingResponseDto> getUserBookings(Long userId) {
+    public List<BookingResponseDto> getUserBookings(Long userId, PageRequest pageRequest) {
         User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Пользователя с таким id" +
                 " не существует"));
         Status status = Status.REJECTED;
@@ -46,7 +47,7 @@ public class GetRejectedUserBookings implements BookingGenerator {
     }
 
     @Override
-    public List<BookingResponseDto> getOwnerBookings(Long userId) {
+    public List<BookingResponseDto> getOwnerBookings(Long userId, PageRequest pageRequest) {
         User owner = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Пользователя с таким id" +
                 " не существует"));
         List<Item> items = itemRepository.findByOwner(owner);

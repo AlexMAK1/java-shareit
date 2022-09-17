@@ -26,13 +26,17 @@ public class Item {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User owner;
+    @Column(name = "request_Id")
+    private Long requestId;
     @Transient
     private final List<Comment> comments = new ArrayList<>();
 
-    public Item(String name, String description, Boolean available, User owner) {
+
+    public Item(String name, String description, Boolean available, User owner, Long requestId) {
         this.name = name;
         this.description = description;
         this.available = available;
         this.owner = owner;
+        this.requestId = requestId;
     }
 }

@@ -2,6 +2,7 @@ package ru.practicum.shareit.booking;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingResponseDto;
@@ -107,22 +108,22 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<BookingResponseDto> getBookings(String state, Long userId) {
+    public List<BookingResponseDto> getBookings(String state, Long userId, PageRequest pageRequest) {
         BookingGenerator bookingUserGenerator = bookingGenerators.get(state);
         if (!bookingGenerators.containsKey(state)) {
             log.error("Unknown state: UNSUPPORTED_STATUS: {}", state);
             throw new ValidationException("Unknown state: UNSUPPORTED_STATUS");
         }
-        return bookingUserGenerator.getUserBookings(userId);
+        return bookingUserGenerator.getUserBookings(userId, pageRequest);
     }
 
     @Override
-    public List<BookingResponseDto> getOwnerBookings(String state, Long userId) {
+    public List<BookingResponseDto> getOwnerBookings(String state, Long userId, PageRequest pageRequest) {
         BookingGenerator bookingOwnerGenerator = bookingGenerators.get(state);
         if (!bookingGenerators.containsKey(state)) {
             log.error("Unknown state: UNSUPPORTED_STATUS: {}", state);
             throw new ValidationException("Unknown state: UNSUPPORTED_STATUS");
         }
-        return bookingOwnerGenerator.getOwnerBookings(userId);
+        return bookingOwnerGenerator.getOwnerBookings(userId, pageRequest);
     }
 }
