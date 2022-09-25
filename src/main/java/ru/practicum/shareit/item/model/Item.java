@@ -31,7 +31,6 @@ public class Item {
     @Transient
     private final List<Comment> comments = new ArrayList<>();
 
-
     public Item(String name, String description, Boolean available, User owner, Long requestId) {
         this.name = name;
         this.description = description;

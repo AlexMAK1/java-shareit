@@ -35,16 +35,11 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public ItemRequestDto create(ItemRequestDto itemRequestDto, long userId) {
-        if (userRepository.findById(userId).isEmpty()) {
-            log.error("Ошибка, валидация не пройдена. Пользователя с данным id не существует: {}", userId);
-            throw new NotFoundException("Ошибка, валидация не пройдена. Пользователя с данным id " +
-                    "не существует");
-        }
-        User requestor = userRepository.getReferenceById(userId);
-        ItemRequest itemRequest = new ItemRequest();
-        itemRequest.setDescription(itemRequestDto.getDescription());
-        itemRequest.setRequestor(requestor);
-        itemRequest.setCreated(LocalDateTime.now());
+        User requestor = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Ошибка, валидация " +
+                "не пройдена. Пользователя с данным id не существует"));
+        log.error("Ошибка, валидация не пройдена. Пользователя с данным id не существует: {}", userId);
+        LocalDateTime created = LocalDateTime.now();
+        ItemRequest itemRequest = RequestConverter.toItemRequest(itemRequestDto, created, requestor);
         requestRepository.save(itemRequest);
         log.info("Сохраняем новый запрос: {}", itemRequest);
         return RequestConverter.toItemRequestDto(itemRequest);
@@ -52,12 +47,9 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public List<ItemRequestDto> getRequests(long userId) {
-        if (userRepository.findById(userId).isEmpty()) {
-            log.error("Ошибка, валидация не пройдена. Пользователя с данным id не существует: {}", userId);
-            throw new NotFoundException("Ошибка, валидация не пройдена. Пользователя с данным id " +
-                    "не существует");
-        }
-        User requestor = userRepository.getReferenceById(userId);
+        User requestor = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Ошибка, валидация " +
+                "не пройдена. Пользователя с данным id не существует"));
+        log.error("Ошибка, валидация не пройдена. Пользователя с данным id не существует: {}", userId);
         List<ItemRequest> requests = requestRepository.findByRequestor(requestor);
         for (ItemRequest itemRequest : requests) {
             Item item = itemRepository.findByRequestId(itemRequest.getId());
@@ -76,12 +68,9 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public List<ItemRequestDto> getAllRequests(PageRequest pageRequest, long userId) {
-        if (userRepository.findById(userId).isEmpty()) {
+        User requestor = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Ошибка, валидация " +
+                "не пройдена. Пользователя с данным id не существует"));
             log.error("Ошибка, валидация не пройдена. Пользователя с данным id не существует: {}", userId);
-            throw new NotFoundException("Ошибка, валидация не пройдена. Пользователя с данным id " +
-                    "не существует");
-        }
-        User requestor = userRepository.getReferenceById(userId);
         List<ItemRequest> requests = requestRepository.findAllByRequestor(requestor, pageRequest);
         for (ItemRequest itemRequest : requests) {
             if (itemRequest.getRequestor().getId().equals(userId)) {
@@ -111,11 +100,9 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public ItemRequestDto getRequest(Long requestId, long userId) {
-        if (userRepository.findById(userId).isEmpty()) {
-            log.error("Ошибка, валидация не пройдена. Пользователя с данным id не существует: {}", userId);
-            throw new NotFoundException("Ошибка, валидация не пройдена. Пользователя с данным id " +
-                    "не существует");
-        }
+        userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Ошибка, валидация " +
+                "не пройдена. Пользователя с данным id не существует"));
+        log.error("Ошибка, валидация не пройдена. Пользователя с данным id не существует: {}", userId);
         ItemRequest itemRequest = requestRepository.findById(requestId).orElseThrow(() -> new NotFoundException("Запроса с таким id" +
                 " не существует"));
         Item item = itemRepository.findByRequestId(itemRequest.getId());

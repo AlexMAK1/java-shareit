@@ -1,7 +1,6 @@
 package ru.practicum.shareit.user;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.user.dto.UserDto;
@@ -16,19 +15,17 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final UserConverter userConverter;
 
-    @Autowired
-    public UserServiceImpl(UserRepository userRepository, UserConverter userConverter) {
+    public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.userConverter = userConverter;
     }
+
 
     @Override
     public UserDto create(UserDto userDto) {
-        User user = userConverter.toUser(userDto);
+        User user = UserConverter.toUser(userDto);
         log.info("Сохраняем нового пользователя: {}", user);
-        return userConverter.toUserDto(userRepository.save(user));
+        return UserConverter.toUserDto(userRepository.save(user));
     }
 
     @Override
@@ -39,7 +36,7 @@ public class UserServiceImpl implements UserService {
                     "не существует");
         } else {
             log.info("Находим пользователя с id: {} {}", id, userRepository.getReferenceById(id));
-            return userConverter.toUserDto(userRepository.getReferenceById(id));
+            return UserConverter.toUserDto(userRepository.getReferenceById(id));
         }
     }
 
@@ -48,7 +45,7 @@ public class UserServiceImpl implements UserService {
         Collection<User> users = userRepository.findAll();
         log.info("Находим всех существующих пользователей: {}", users);
         return users.stream()
-                .map(userConverter::toUserDto)
+                .map(UserConverter::toUserDto)
                 .collect(Collectors.toList());
     }
 
@@ -64,7 +61,7 @@ public class UserServiceImpl implements UserService {
             user.setEmail(email);
         }
         log.info("Обновляем данные пользователя: {}", user);
-        return userConverter.toUserDto(userRepository.save(user));
+        return UserConverter.toUserDto(userRepository.save(user));
     }
 
     @Override

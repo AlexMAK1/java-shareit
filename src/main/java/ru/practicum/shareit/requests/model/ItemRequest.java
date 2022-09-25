@@ -30,4 +30,10 @@ public class ItemRequest {
     @Transient
     private List<Item> items = new ArrayList<>();
 
+    public ItemRequest(Long id, String description, LocalDateTime created, User requestor) {
+        this.id = id;
+        this.description = description;
+        this.created = created;
+        this.requestor = requestor;
+    }
 }
