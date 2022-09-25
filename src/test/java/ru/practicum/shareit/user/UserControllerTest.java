@@ -75,7 +75,6 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.email", is(userDto.getEmail())));
 
         verify(userService, times(1)).getUser(1L);
-
     }
 
     @Test
