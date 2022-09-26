@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -69,7 +70,15 @@ class ItemRequestControllerTest {
     }
 
     @Test
-    void getAllRequests() {
+    void getAllRequests() throws Exception {
+        when(requestService.getAllRequests(any(), anyLong()))
+                .thenReturn(Collections.emptyList());
+        mockMvc.perform(get("/requests/all")
+                        .header("X-Sharer-User-Id", "1"))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.content().json("[]"));
+
+        verify(requestService, times(1)).getAllRequests(PageRequest.of(0,10), 1L);
     }
 
     @Test

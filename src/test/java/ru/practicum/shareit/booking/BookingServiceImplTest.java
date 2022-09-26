@@ -29,6 +29,10 @@ class BookingServiceImplTest {
     UserRepository userRepository;
     BookingRepository bookingRepository;
 
+    BookingGenerator bookingGenerator;
+
+    GetAllUserBookings getAllUserBookings;
+
     @BeforeEach
     void setUp() {
         itemRepository = mock(ItemRepository.class);
@@ -202,4 +206,5 @@ class BookingServiceImplTest {
         Assertions.assertEquals("Ошибка, валидация не пройдена. Пользователю с данным id вещь не принадлежит",
                 exception.getMessage());
     }
+
 }

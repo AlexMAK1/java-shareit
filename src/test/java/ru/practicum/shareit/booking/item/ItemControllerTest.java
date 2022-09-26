@@ -21,8 +21,7 @@ import java.util.Collections;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -40,12 +39,15 @@ class ItemControllerTest {
 
     private ItemDto itemDto;
 
+    private ItemDto itemUpdateDto;
+
     private ItemInfoDto itemInfoDto;
 
     @BeforeEach
     void setUp() {
         itemDto = new ItemDto(1L, "item1", "description1", true, 1L);
         itemInfoDto = new ItemInfoDto(1L, "item", "description", true, null, null, null);
+        itemUpdateDto = new ItemDto(1L, "itemUpdate", "itemUpdate", true, 1L);
     }
 
     @Test
@@ -68,7 +70,23 @@ class ItemControllerTest {
     }
 
     @Test
-    void update() {
+    void update() throws Exception {
+        when(itemService.update(any(), anyLong(), anyLong()))
+                .thenReturn(itemUpdateDto);
+
+        mockMvc.perform(patch("/items/1")
+                        .content(mapper.writeValueAsString(itemDto))
+                        .characterEncoding(StandardCharsets.UTF_8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .param("id", "1")
+                        .header("X-Sharer-User-Id", "1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(itemUpdateDto.getId()), Long.class))
+                .andExpect(jsonPath("$.name", is(itemUpdateDto.getName())))
+                .andExpect(jsonPath("$.description", is(itemUpdateDto.getDescription())));
+
+        verify(itemService, times(1)).update(itemDto, 1L, 1L);
     }
 
     @Test

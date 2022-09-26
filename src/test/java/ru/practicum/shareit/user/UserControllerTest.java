@@ -18,8 +18,8 @@ import java.util.Collections;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -37,12 +37,20 @@ class UserControllerTest {
 
     private UserDto userDto;
 
+    private UserDto updateUserDto;
+
     @BeforeEach
     void setUp() {
         userDto = new UserDto(
                 1L,
                 "user",
                 "user@email"
+        );
+
+        updateUserDto = new UserDto(
+                1L,
+                "updateUser",
+                "updateUser@email"
         );
     }
 
@@ -96,10 +104,30 @@ class UserControllerTest {
     }
 
     @Test
-    void updateUser() {
+    void updateUser() throws Exception {
+        when(userService.update(any(), anyLong()))
+                .thenReturn(updateUserDto);
+        mockMvc.perform(patch("/users/1")
+                        .content(mapper.writeValueAsString(userDto))
+                        .characterEncoding(StandardCharsets.UTF_8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .param("id", "1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(updateUserDto.getId()), Long.class))
+                .andExpect(jsonPath("$.name", is(updateUserDto.getName())))
+                .andExpect(jsonPath("$.email", is(updateUserDto.getEmail())));
+
+        verify(userService, times(1)).update(userDto, 1L);
     }
 
     @Test
-    void deleteUser() {
+    void deleteUser() throws Exception {
+        long id = 1L;
+
+        doNothing().when(userService).delete(id);
+        mockMvc.perform(delete("/users/{id}", id))
+                .andExpect(status().isOk())
+                .andDo(print());
     }
 }
