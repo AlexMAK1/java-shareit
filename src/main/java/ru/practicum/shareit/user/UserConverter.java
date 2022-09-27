@@ -1,10 +1,11 @@
 package ru.practicum.shareit.user;
 
-import org.springframework.stereotype.Service;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
 
-@Service
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UserConverter {
 
     public static UserDto toUserDto(User user) {

@@ -3,13 +3,12 @@ package ru.practicum.shareit.booking;
 import org.springframework.data.domain.PageRequest;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingResponseDto;
-import ru.practicum.shareit.exception.ValidationException;
 
 import java.util.List;
 
 interface BookingService {
 
-    BookingDto create(BookingDto bookingDto, Long userId) throws ValidationException;
+    BookingDto create(BookingDto bookingDto, Long userId);
 
     BookingResponseDto update(Long id, Long userId, Boolean approved);
 

@@ -39,7 +39,6 @@ public class GetAllUserBookings implements BookingGenerator {
             List<Booking> bookings = bookingRepository.findAllByBooker(user, pageRequest);
             log.info("Возвращаем список всех бронирований для пользователя с id: {} {}", userId, bookings);
             return bookings.stream()
-                    .sorted(this::compareAll)
                     .map(BookingConverter::toBookingResponseDto)
                     .collect(Collectors.toList());
     }
@@ -52,13 +51,7 @@ public class GetAllUserBookings implements BookingGenerator {
         List<Booking> bookings = bookingRepository.findAllByItem(item, pageRequest);
         log.info("Возвращаем список всех бронирований для владельца с id: {} {}", userId, bookings);
         return bookings.stream()
-                .sorted(this::compareAll)
                 .map(BookingConverter::toBookingResponseDto)
                 .collect(Collectors.toList());
-
-    }
-
-    private int compareAll(Booking booking1, Booking booking2) {
-        return booking2.getEnd().compareTo(booking1.getEnd());
     }
 }

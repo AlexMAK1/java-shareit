@@ -1,7 +1,7 @@
 package ru.practicum.shareit.requests;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -14,17 +14,13 @@ import java.util.List;
 @Slf4j
 @Validated
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(path = "/requests")
 public class ItemRequestController {
 
     private final RequestService requestService;
 
     private static final String HEADER = "X-Sharer-User-Id";
-
-    @Autowired
-    public ItemRequestController(RequestService requestService) {
-        this.requestService = requestService;
-    }
 
     @GetMapping
     public List<ItemRequestDto> getRequests(@RequestHeader(HEADER) long userId) {

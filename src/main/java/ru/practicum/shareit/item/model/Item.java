@@ -21,10 +21,10 @@ public class Item {
     private String name;
     @Column(name = "description", nullable = false)
     private String description;
-    @Column(name = "is_available")
+    @Column(name = "is_available", nullable = false)
     private Boolean available;
-    @ManyToOne
-    @JoinColumn(name = "user_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User owner;
     @Column(name = "request_Id")
     private Long requestId;

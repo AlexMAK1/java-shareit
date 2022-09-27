@@ -61,7 +61,6 @@ public class RequestServiceImpl implements RequestService {
         }
         log.info("Находим все запросы пользователя: {} {}", userId, requests);
         return requests.stream()
-                .sorted(this::compareAll)
                 .map(RequestConverter::toItemRequestDto)
                 .collect(Collectors.toList());
     }
@@ -77,7 +76,6 @@ public class RequestServiceImpl implements RequestService {
                 requests = new ArrayList<>();
                 log.info("Находим все запросы пользователя: {} {}", userId, requests);
                 return requests.stream()
-                        .sorted(this::compareAll)
                         .map(RequestConverter::toItemRequestDto)
                         .collect(Collectors.toList());
             }
@@ -93,7 +91,6 @@ public class RequestServiceImpl implements RequestService {
         }
         log.info("Находим все запросы пользователя: {} {}", userId, requests);
         return itemRequestList.stream()
-                .sorted(this::compareAll)
                 .map(RequestConverter::toItemRequestDto)
                 .collect(Collectors.toList());
     }
@@ -113,9 +110,5 @@ public class RequestServiceImpl implements RequestService {
         itemRequest.setItems(items);
         log.info("Находим запрос с id: {} {}", requestId, itemRequest);
         return RequestConverter.toItemRequestDto(itemRequest);
-    }
-
-    private int compareAll(ItemRequest itemRequest1, ItemRequest itemRequest2) {
-        return itemRequest1.getCreated().compareTo(itemRequest2.getCreated());
     }
 }

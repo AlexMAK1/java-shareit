@@ -206,5 +206,4 @@ class BookingServiceImplTest {
         Assertions.assertEquals("Ошибка, валидация не пройдена. Пользователю с данным id вещь не принадлежит",
                 exception.getMessage());
     }
-
 }

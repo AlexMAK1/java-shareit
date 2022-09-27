@@ -12,7 +12,6 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.UserRepository;
 import ru.practicum.shareit.user.model.User;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,7 +39,6 @@ public class GetFutureUserBookings implements BookingGenerator {
         List<Booking> bookings = bookingRepository.findAllByBooker(user, pageRequest);
         log.info("Возвращаем список будущих бронирований для пользователя с id: {} {}", userId, bookings);
         return bookings.stream()
-                .sorted(this::compareFuture)
                 .map(BookingConverter::toBookingResponseDto)
                 .collect(Collectors.toList());
     }
@@ -53,13 +51,7 @@ public class GetFutureUserBookings implements BookingGenerator {
         List<Booking> bookings = bookingRepository.findAllByItem(item, pageRequest);
         log.info("Возвращаем список будущих бронирований для владельца с id: {} {}", userId, bookings);
         return bookings.stream()
-                .sorted(this::compareFuture)
                 .map(BookingConverter::toBookingResponseDto)
                 .collect(Collectors.toList());
-    }
-
-    private int compareFuture(Booking booking1, Booking booking2) {
-        LocalDateTime currentMoment = LocalDateTime.now();
-        return (booking2.getEnd().compareTo(currentMoment)) - (booking1.getEnd().compareTo(currentMoment));
     }
 }

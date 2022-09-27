@@ -13,7 +13,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingResponseDto;
-import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
@@ -48,7 +47,6 @@ class BookingControllerTest {
     LocalDateTime start = LocalDateTime.of(2022, 10, 23, 8, 00);
     LocalDateTime end = LocalDateTime.of(2022, 10, 23, 9, 00);
 
-    Booking booking = new Booking(start, end, item1, user1);
     BookingDto bookingDto = new BookingDto(1L, start, end, 1L);
 
     BookingResponseDto bookingResponseDto = new BookingResponseDto(1L, start, end, Status.WAITING, item1, user1);

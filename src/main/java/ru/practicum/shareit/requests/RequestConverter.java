@@ -1,11 +1,14 @@
 package ru.practicum.shareit.requests;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import ru.practicum.shareit.requests.dto.ItemRequestDto;
 import ru.practicum.shareit.requests.model.ItemRequest;
 import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RequestConverter {
 
     public static ItemRequestDto toItemRequestDto(ItemRequest itemRequest) {

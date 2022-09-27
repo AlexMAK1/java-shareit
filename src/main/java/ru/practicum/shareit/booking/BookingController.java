@@ -8,7 +8,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingResponseDto;
-import ru.practicum.shareit.exception.ValidationException;
 
 import javax.validation.Valid;
 import javax.validation.constraints.PositiveOrZero;
@@ -33,8 +32,7 @@ public class BookingController {
 
 
     @PostMapping()
-    public BookingDto create(@RequestHeader(USER_ID_HEADER) long userId, @Valid @RequestBody BookingDto bookingDto)
-            throws ValidationException {
+    public BookingDto create(@RequestHeader(USER_ID_HEADER) long userId, @Valid @RequestBody BookingDto bookingDto) {
         return bookingService.create(bookingDto, userId);
     }
 

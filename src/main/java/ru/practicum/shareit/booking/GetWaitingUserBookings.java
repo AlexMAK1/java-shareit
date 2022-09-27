@@ -41,7 +41,6 @@ public class GetWaitingUserBookings implements BookingGenerator {
         List<Booking> bookings = bookingRepository.findAllByBookerAndStatusEquals(user, status);
         log.info("Возвращаем список ожидающих бронирований для пользователя с id: {} {}", userId, bookings);
         return bookings.stream()
-                .sorted(this::compareAll)
                 .map(BookingConverter::toBookingResponseDto)
                 .collect(Collectors.toList());
     }
@@ -63,13 +62,7 @@ public class GetWaitingUserBookings implements BookingGenerator {
         }
         log.info("Возвращаем список отклонненых бронирований для владельца с id: {} {}", userId, bookings);
         return bookings.stream()
-                .sorted(this::compareAll)
                 .map(BookingConverter::toBookingResponseDto)
                 .collect(Collectors.toList());
     }
-
-    private int compareAll(Booking booking1, Booking booking2) {
-        return booking2.getEnd().compareTo(booking1.getEnd());
-    }
 }
-
