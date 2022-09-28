@@ -5,7 +5,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.PageRequest;
 import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.item.ItemConverter;
 import ru.practicum.shareit.item.ItemRepository;
+import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.requests.dto.ItemRequestDto;
 import ru.practicum.shareit.requests.model.ItemRequest;
@@ -15,6 +17,7 @@ import ru.practicum.shareit.user.model.User;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -39,8 +42,11 @@ class RequestServiceImplTest {
     Item item2 = new Item("item2", "chair", true, user2, 2L);
 
     List<Item> items = List.of(item1, item2);
+    List<ItemDto> itemDtos = items.stream()
+            .map(ItemConverter::toItemDto)
+            .collect(Collectors.toList());
 
-    ItemRequestDto itemRequestDto = new ItemRequestDto(1L, "request1", LocalDateTime.now(), items);
+    ItemRequestDto itemRequestDto = new ItemRequestDto(1L, "request1", LocalDateTime.now(), itemDtos);
     ItemRequest itemRequest = RequestConverter.toItemRequest(itemRequestDto, LocalDateTime.now(), user1);
 
     @BeforeEach

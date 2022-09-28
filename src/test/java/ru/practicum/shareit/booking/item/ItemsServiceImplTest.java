@@ -48,10 +48,6 @@ class ItemsServiceImplTest {
 
     Booking bookingNext = new Booking(start, end, item1, user1);
 
-    ItemInfoDto itemInfoDto = new ItemInfoDto(1L, "itemInfoDto", "description itemInfoDto", true, null, null, Collections.emptyList());
-
-    ItemInfoDto.BookingDto lastBooking = new ItemInfoDto.BookingDto(1L, 1L);
-
     Comment comment = new Comment(1L, "comment", item1, user1, LocalDateTime.now());
 
     @BeforeEach

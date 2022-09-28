@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.item.dto.ItemDto;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
@@ -21,5 +21,5 @@ public class ItemRequestDto {
     @NotBlank
     private String description;
     private LocalDateTime created;
-    private List<Item> items = new ArrayList<>();
+    private List<ItemDto> items = new ArrayList<>();
 }

@@ -2,11 +2,13 @@ package ru.practicum.shareit.requests;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import ru.practicum.shareit.item.ItemConverter;
 import ru.practicum.shareit.requests.dto.ItemRequestDto;
 import ru.practicum.shareit.requests.model.ItemRequest;
 import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RequestConverter {
@@ -17,6 +19,8 @@ public class RequestConverter {
                 itemRequest.getDescription(),
                 itemRequest.getCreated(),
                 itemRequest.getItems()
+                        .stream().map(ItemConverter::toItemDto)
+                        .collect(Collectors.toList())
         );
     }
 

@@ -12,6 +12,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import ru.practicum.shareit.item.ItemConverter;
+import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.requests.dto.ItemRequestDto;
 import ru.practicum.shareit.user.model.User;
@@ -20,6 +22,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
@@ -53,8 +56,11 @@ class ItemRequestControllerTest {
         Item item1 = new Item("item1", "table", true, user1, 1L);
         Item item2 = new Item("item2", "chair", true, user2, 2L);
         List<Item> items = List.of(item1, item2);
+        List<ItemDto> itemDtos = items.stream()
+                .map(ItemConverter::toItemDto)
+                .collect(Collectors.toList());
         LocalDateTime created = LocalDateTime.now();
-        itemRequestDto = new ItemRequestDto(1L, "request1", created, items);
+        itemRequestDto = new ItemRequestDto(1L, "request1", created, itemDtos);
     }
 
     @Test
@@ -78,7 +84,7 @@ class ItemRequestControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.content().json("[]"));
 
-        verify(requestService, times(1)).getAllRequests(PageRequest.of(0,10), 1L);
+        verify(requestService, times(1)).getAllRequests(PageRequest.of(0, 10), 1L);
     }
 
     @Test
