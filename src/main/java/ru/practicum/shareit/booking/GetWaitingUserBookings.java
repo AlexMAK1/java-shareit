@@ -2,6 +2,7 @@ package ru.practicum.shareit.booking;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.booking.dto.BookingResponseDto;
 import ru.practicum.shareit.booking.model.Booking;
@@ -33,20 +34,19 @@ public class GetWaitingUserBookings implements BookingGenerator {
     }
 
     @Override
-    public List<BookingResponseDto> getUserBookings(Long userId) {
+    public List<BookingResponseDto> getUserBookings(Long userId, PageRequest pageRequest) {
         User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Пользователя с таким id" +
                 " не существует"));
         Status status = Status.WAITING;
         List<Booking> bookings = bookingRepository.findAllByBookerAndStatusEquals(user, status);
         log.info("Возвращаем список ожидающих бронирований для пользователя с id: {} {}", userId, bookings);
         return bookings.stream()
-                .sorted(this::compareAll)
                 .map(BookingConverter::toBookingResponseDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<BookingResponseDto> getOwnerBookings(Long userId) {
+    public List<BookingResponseDto> getOwnerBookings(Long userId, PageRequest pageRequest) {
         User owner = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Пользователя с таким id" +
                 " не существует"));
         List<Item> items = itemRepository.findByOwner(owner);
@@ -62,13 +62,7 @@ public class GetWaitingUserBookings implements BookingGenerator {
         }
         log.info("Возвращаем список отклонненых бронирований для владельца с id: {} {}", userId, bookings);
         return bookings.stream()
-                .sorted(this::compareAll)
                 .map(BookingConverter::toBookingResponseDto)
                 .collect(Collectors.toList());
     }
-
-    private int compareAll(Booking booking1, Booking booking2) {
-        return booking2.getEnd().compareTo(booking1.getEnd());
-    }
 }
-

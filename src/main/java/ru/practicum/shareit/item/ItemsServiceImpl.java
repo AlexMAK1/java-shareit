@@ -170,9 +170,9 @@ public class ItemsServiceImpl implements ItemService {
             throw new NotFoundException("Ошибка, валидация не пройдена. Отсутствует id пользователя в запросе");
         }
         if (!itemRepository.getReferenceById(id).getOwner().getId().equals(userId)) {
-            log.error("Ошибка, валидация не пройдена. Пользователю с данным id вещь не принаджит: {}", userId);
+            log.error("Ошибка, валидация не пройдена. Пользователю с данным id вещь не принадлежит: {}", userId);
             throw new NotFoundException("Ошибка, валидация не пройдена. Пользователю с данным id " +
-                    "вещь не принаджит");
+                    "вещь не принадлежит");
         }
     }
 

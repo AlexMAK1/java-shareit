@@ -1,22 +1,25 @@
 package ru.practicum.shareit.requests.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.UniqueElements;
+import ru.practicum.shareit.item.dto.ItemDto;
 
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
-@NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @AllArgsConstructor
+@NoArgsConstructor
 public class ItemRequestDto {
 
-    @NotBlank
     private Long id;
     @NotBlank
-    @UniqueElements
     private String description;
-    @NotBlank
-    private Long requestorId;
+    private LocalDateTime created;
+    private List<ItemDto> items = new ArrayList<>();
 }

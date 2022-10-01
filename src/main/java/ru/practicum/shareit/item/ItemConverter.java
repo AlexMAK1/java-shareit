@@ -16,7 +16,8 @@ public class ItemConverter {
                 item.getId(),
                 item.getName(),
                 item.getDescription(),
-                item.getAvailable()
+                item.getAvailable(),
+                item.getRequestId()
         );
     }
 
@@ -25,7 +26,8 @@ public class ItemConverter {
                 itemDto.getName(),
                 itemDto.getDescription(),
                 itemDto.getAvailable(),
-                owner
+                owner,
+                itemDto.getRequestId()
         );
     }
 
