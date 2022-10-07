@@ -14,7 +14,6 @@ import java.util.List;
 
 @Slf4j
 @RestController
-
 @RequestMapping(path = "/bookings")
 public class BookingController {
 
@@ -28,7 +27,6 @@ public class BookingController {
     public BookingController(BookingService bookingService) {
         this.bookingService = bookingService;
     }
-
 
     @PostMapping()
     public BookingDto create(@RequestHeader(USER_ID_HEADER) long userId, @RequestBody BookingDto bookingDto) {

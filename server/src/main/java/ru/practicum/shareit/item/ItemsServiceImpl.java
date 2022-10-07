@@ -51,9 +51,10 @@ public class ItemsServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemDto update(ItemDto itemDto, long userId, long id) {
+    public ItemDto update(ItemDto itemDto, long id, long userId) {
         validate(userId, id);
-        Item item = itemRepository.getReferenceById(id);
+        Item item = itemRepository.findById(id).orElseThrow(() -> new NotFoundException("Вещи с таким id" +
+                " не существует"));
         String name = itemDto.getName();
         if (name != null) {
             item.setName(name);

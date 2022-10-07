@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.dto.UserDto;
 
-
 import java.util.List;
 
 @Slf4j
@@ -41,7 +40,7 @@ public class UserController {
     }
 
     @DeleteMapping("{id}")
-    public void deleteUser(@PathVariable("id") long id) {
+    public void delete(@PathVariable("id") long id) {
         userService.delete(id);
     }
 }

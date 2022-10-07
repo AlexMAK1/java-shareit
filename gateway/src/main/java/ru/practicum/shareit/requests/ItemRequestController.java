@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.requests.dto.ItemRequestDto;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 
 @Slf4j
 @Validated
@@ -26,10 +28,11 @@ public class ItemRequestController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<Object> getAllRequests(@RequestParam(name = "from", defaultValue = "0")
-                                               Integer from, @RequestParam(name = "size",
-            defaultValue = "10") Integer size, @RequestHeader(HEADER) long userId) {
-        log.info("Get all requests from={}, size={}", from, size);
+    public ResponseEntity<Object> getAllRequests(@RequestHeader("X-Sharer-User-Id") long userId,
+                                              @PositiveOrZero @RequestParam(name = "from", defaultValue = "0") Integer from,
+                                              @Positive @RequestParam(name = "size", defaultValue = "10") Integer size) {
+
+        log.info("Get booking with userId={}, from={}, size={}", userId, from, size);
         return itemRequestClient.getAllRequests(userId, from, size);
     }
 

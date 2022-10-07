@@ -76,9 +76,9 @@ class ItemsServiceImplTest {
 
     @Test
     void update() {
+        when(itemRepository.findById(anyLong()))
+                .thenReturn(Optional.ofNullable(item1));
         when(itemRepository.getReferenceById(anyLong()))
-                .thenReturn(item1);
-        when(itemRepository.findByRequestId(anyLong()))
                 .thenReturn(item1);
 
         Item item = ItemConverter.toItem(itemDto, user1);

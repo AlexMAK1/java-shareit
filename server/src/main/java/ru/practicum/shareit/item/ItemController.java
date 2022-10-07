@@ -29,7 +29,7 @@ public class ItemController {
 
     @PatchMapping("{id}")
     public ItemDto update(@RequestHeader(HEADER) long userId, @RequestBody ItemDto itemDto, @PathVariable("id") long id) {
-        return itemService.update(itemDto, userId, id);
+        return itemService.update(itemDto, id, userId);
     }
 
     @GetMapping("{id}")
