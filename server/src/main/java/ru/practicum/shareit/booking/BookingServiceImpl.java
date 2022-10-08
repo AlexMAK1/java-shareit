@@ -49,10 +49,6 @@ public class BookingServiceImpl implements BookingService {
             log.error("Вещь в данный момент не доступна: {}", item.getId());
             throw new ValidationException("Вещь в данный момент не доступна");
         }
-        if (bookingDto.getEnd().isBefore(bookingDto.getStart())) {
-            log.error("Дата окончания брони перед датой начала брони");
-            throw new ValidationException("Дата окончания брони перед датой начала брони");
-        }
         User booker = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Пользователя с таким id" +
                 " не существует"));
         Booking booking = BookingConverter.toBooking(bookingDto, item, booker);

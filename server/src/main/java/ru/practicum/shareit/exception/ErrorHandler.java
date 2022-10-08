@@ -14,6 +14,7 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleInvalidEmailException(final ValidationException e) {
+        log.error("400 {}", e.getMessage(), e);
         return new ErrorResponse(
                 e.getMessage()
         );
@@ -22,6 +23,7 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleUserNotFoundException(final NotFoundException e) {
+        log.error("404 {}", e.getMessage(), e);
         return new ErrorResponse(
                 e.getMessage()
         );
@@ -30,6 +32,7 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handleConflictException(final ConflictException e) {
+        log.error("409 {}", e.getMessage(), e);
         return new ErrorResponse(
                 e.getMessage()
         );

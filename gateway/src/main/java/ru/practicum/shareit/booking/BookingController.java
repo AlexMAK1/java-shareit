@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.dto.BookItemRequestDto;
+import ru.practicum.shareit.exception.ValidationException;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -23,6 +24,10 @@ public class BookingController {
     @PostMapping
     public ResponseEntity<Object> bookItem(@RequestHeader("X-Sharer-User-Id") long userId,
                                            @RequestBody @Valid BookItemRequestDto requestDto) {
+        if (requestDto.getStart().isAfter(requestDto.getEnd())) {
+            log.error("The start is after end: {}, {}", requestDto.getStart(), requestDto.getEnd());
+            throw new ValidationException("The start is after end");
+        }
         log.info("Creating booking {}, userId={}", requestDto, userId);
         return bookingClient.createBooking(userId, requestDto);
     }

@@ -14,6 +14,7 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleInvalidEmailException(final ValidationException e) {
+        log.error("400 {}", e.getMessage(), e);
         return new ErrorResponse(
                 e.getMessage()
         );
@@ -22,6 +23,7 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleUserNotFoundException(final NotFoundException e) {
+        log.error("404 {}", e.getMessage(), e);
         return new ErrorResponse(
                 e.getMessage()
         );
@@ -30,6 +32,7 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handleConflictException(final ConflictException e) {
+        log.error("409 {}", e.getMessage(), e);
         return new ErrorResponse(
                 e.getMessage()
         );
@@ -37,8 +40,17 @@ public class ErrorHandler {
 
 
     @ExceptionHandler
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handleThrowable(final Throwable e) {
+        log.error("500 {}", e.getMessage(), e);
+        return new ErrorResponse(
+                "Ошибка валидации. Проверьте введенные данные"
+        );
+    }
+
+    @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleThrowable(final MethodArgumentNotValidException e) {
+    public ErrorResponse handleConstraintViolationException(final MethodArgumentNotValidException e) {
         log.error("400 {}", e.getMessage(), e);
         return new ErrorResponse(
                 "Ошибка валидации. Проверьте введенные данные"
